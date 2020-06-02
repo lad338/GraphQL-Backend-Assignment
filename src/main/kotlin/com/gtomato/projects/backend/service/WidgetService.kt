@@ -3,21 +3,24 @@ package com.gtomato.projects.backend.service
 import com.expediagroup.graphql.spring.operations.Query
 import com.gtomato.projects.backend.model.Widget
 import com.gtomato.projects.backend.repository.WidgetRepository
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.reactive.asFlow
+import kotlinx.coroutines.reactive.awaitFirst
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import javax.annotation.Resource
 
 @Service
 class WidgetService: Query {
 
-    @Resource
+    @Autowired
     private lateinit var widgetRepository: WidgetRepository
 
-    fun widgetById(id: Int): Widget? {
-        return widgetRepository.findById(id).block()
+    suspend fun widgetById(id: Int): Widget? {
+        return widgetRepository.findById(id).awaitFirst()
     }
 
-//    @Deprecated("Use widgetById")
-//    fun widgetByValue(value: String): Widget? {
-//        // grabs widget from a deprecated data source, might return null
-//    }
+    suspend fun allWidgets(): List<Widget> {
+        return widgetRepository.findAll().asFlow().toList()
+    }
+
 }
