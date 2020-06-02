@@ -1,4 +1,4 @@
-package com.gtomato.backend.assignment
+package com.gtomato.projects.backend
 
 import org.springframework.boot.builder.SpringApplicationBuilder
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
