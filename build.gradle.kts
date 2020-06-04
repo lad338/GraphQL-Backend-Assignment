@@ -27,12 +27,11 @@ dependencies {
 
 	runtimeOnly ("org.postgresql:postgresql")
 
-	implementation("io.r2dbc:r2dbc-postgresql:0.8.3.RELEASE")
 	implementation("com.expediagroup:graphql-kotlin-schema-generator:3.0.0-RC8")
 	implementation("com.expediagroup:graphql-kotlin-spring-server:3.0.0-RC8")
+	implementation("com.expediagroup:graphql-kotlin-client:3.0.0-RC8")
 
 	implementation ("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation ("org.springframework.data:spring-data-r2dbc:1.1.0.RELEASE")
 	implementation ( "com.squareup:kotlinpoet:1.6.0")
 }
 
@@ -44,5 +43,11 @@ tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		freeCompilerArgs = listOf("-Xjsr305=strict")
 		jvmTarget = "1.8"
+	}
+}
+
+graphql {
+	client {
+		converters.put("UUID", com.expediagroup.graphql.plugin.generator.ScalarConverterMapping("java.util.UUID", "com.gtomato.projects.backend.graphql.UUIDScalarConverter"))
 	}
 }
