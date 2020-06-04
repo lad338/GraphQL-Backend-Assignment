@@ -1,4 +1,4 @@
-package com.gtomato.projects.backend.service
+package com.gtomato.projects.backend.graphql
 
 import com.expediagroup.graphql.spring.operations.Query
 import com.gtomato.projects.backend.model.entity.Widget
@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class WidgetService: Query {
+class WidgetQuery: Query {
     companion object {
         val context = CoroutineScope(Dispatchers.IO).coroutineContext
     }

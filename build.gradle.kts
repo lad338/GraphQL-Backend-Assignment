@@ -7,6 +7,8 @@ plugins {
 	kotlin("jvm") version "1.3.72"
 	kotlin("plugin.spring") version "1.3.72"
 	id("com.expediagroup.graphql") version "3.0.0-RC8"
+	id ("org.jetbrains.kotlin.plugin.allopen") version "1.3.72"
+
 }
 
 group = "com.gtomato.projects.backend"

@@ -1,4 +1,4 @@
-package com.gtomato.projects.backend.service
+package com.gtomato.projects.backend.graphql
 
 import com.expediagroup.graphql.spring.operations.Mutation
 import com.gtomato.projects.backend.model.entity.Widget
