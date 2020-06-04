@@ -2,6 +2,7 @@ package com.gtomato.projects.backend.graphql
 
 import com.expediagroup.graphql.scalars.ID
 import com.expediagroup.graphql.spring.operations.Mutation
+import com.expediagroup.graphql.spring.operations.Query
 import com.gtomato.projects.backend.repository.BookRepository
 import com.gtomato.projects.backend.service.UserService
 import kotlinx.coroutines.CoroutineScope
@@ -30,7 +31,26 @@ data class Book (
     }
 }
 
+@Service
+class BookQuery: Query {
+    companion object {
+        val context = CoroutineScope(Dispatchers.IO).coroutineContext
+    }
 
+    @Autowired
+    private lateinit var bookRepository: BookRepository
+
+    suspend fun allBooks(): List<Book> = withContext(context) {
+        bookRepository.findAll().map { Book.fromEntity(it) }
+    }
+
+    suspend fun getBookById (id: String) : Book? = withContext(context) {
+        bookRepository
+            .findById(UUID.fromString(id))
+            .map { Book.fromEntity(it) }
+            .orElse(null)
+    }
+}
 
 
 @Service
