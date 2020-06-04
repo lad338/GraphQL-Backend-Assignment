@@ -19,7 +19,7 @@ class WidgetService: Query {
     private lateinit var widgetRepository: WidgetRepository
 
     suspend fun widgetById(id: Int): Widget? = withContext(context) {
-        widgetRepository.asyncFindById(id)
+        widgetRepository.findById(id).orElse(null)
     }
 
     suspend fun allWidgets(): List<Widget> = withContext(context) {
