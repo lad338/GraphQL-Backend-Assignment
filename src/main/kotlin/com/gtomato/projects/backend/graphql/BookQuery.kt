@@ -9,15 +9,19 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import java.sql.Date
 import java.util.*
+import kotlin.collections.ArrayList
 
 data class Book (
     val id: ID,
     val name: String? = null,
     val author: User? = null,
-    val publishDate: String? = null
+    val publishDate: String? = null,
+    val numberOfComments: Int? = null,
+    val comments: List<Comment>? = ArrayList()
 ) {
     companion object {
         fun fromEntity (book: com.gtomato.projects.backend.model.entity.Book): Book {
@@ -25,7 +29,9 @@ data class Book (
                 ID(book.id.toString()),
                 book.name,
                 book.author?.let { User.fromEntity(it) },
-                book.publishDate?.toString()
+                book.publishDate?.toString(),
+                book.comments.size,
+                book.comments.map { Comment.fromEntity(it) }
             )
         }
     }
@@ -50,6 +56,25 @@ class BookQuery: Query {
             .map { Book.fromEntity(it) }
             .orElse(null)
     }
+
+    suspend fun listBooks(
+        page: Int?,
+        size: Int?,
+        bookName: String?,
+        authorName: String?,
+        keyword: String?,
+        bookNameSort: Boolean?,             // True = ASC, False = DESC, Null = default order
+        publishDateSort: Boolean?           // True = ASC, False = DESC, Null = default order
+    ): List<Book> = withContext(context) {
+        val pageRequest = PageRequest.of(page ?: 0, size ?: 5)
+
+        val pageResults = keyword ?.let {
+                bookRepository.findByNameContainingOrAuthor_NameContaining(it, it, pageRequest)
+            }
+            ?: bookRepository.findByNameContainingAndAuthor_NameContaining(bookName ?: "", authorName ?: "", pageRequest)
+
+        pageResults.content.map { Book.fromEntity(it) }
+    }
 }
 
 
@@ -66,13 +91,15 @@ class BookUpdater: Mutation {
     @Autowired
     private lateinit var userService: UserService
 
-    suspend fun saveBook (name: String, authorId: String?, publishDate: String?): Book {
+    suspend fun saveBook (name: String, authorId: String, publishDate: String?): Book {
         val book = com.gtomato.projects.backend.model.entity.Book()
-        val author = authorId?.let{ withContext(context) {userService.getUserById(it) } }
-        book.author = author
+        val author = userService.getUserById(authorId)
+
         book.name = name
         book.publishDate = publishDate?.let {Date.valueOf(it)}
         book.id = UUID.randomUUID()
+        book.author = author
+
         return Book.fromEntity(bookRepository.save(book))
 
     }

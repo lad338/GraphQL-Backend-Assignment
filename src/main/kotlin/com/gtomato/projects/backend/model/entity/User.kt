@@ -3,6 +3,7 @@ package com.gtomato.projects.backend.model.entity
 import java.io.Serializable
 import java.util.*
 import javax.persistence.*
+import kotlin.collections.HashSet
 
 @Entity
 @Table(name = "_user")
