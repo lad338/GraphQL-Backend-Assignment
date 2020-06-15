@@ -1,17 +1,32 @@
 package com.gtomato.projects.backend.repository
 
 import com.gtomato.projects.backend.model.entity.Widget
-import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.data.jpa.repository.Query
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.stereotype.Repository
+import java.util.*
+
+interface WidgetRepository  {
+
+    fun findById (id: String): Widget?
+
+    fun getAll(): List<Widget>
+
+}
 
 @Repository
-interface WidgetRepository : JpaRepository<Widget, Int> {
+class WidgetRepositoryImpl: WidgetRepository {
 
-    @Query("SELECT w FROM Widget w WHERE w.id = :id")
-    fun asyncFindById (id: Int): Widget?
 
-    @Query("SELECT w FROM Widget w")
-    fun getAll(): List<Widget>
+    override fun findById(id: String): Widget? {
+        return transaction {
+            Widget.findById(UUID.fromString(id))
+        }
+    }
+
+    override fun getAll(): List<Widget> {
+        return transaction {
+            Widget.all().toList()
+        }
+    }
 
 }

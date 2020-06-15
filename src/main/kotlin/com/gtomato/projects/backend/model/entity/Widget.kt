@@ -1,18 +1,18 @@
 package com.gtomato.projects.backend.model.entity
 
+import org.jetbrains.exposed.dao.Entity
+import org.jetbrains.exposed.dao.EntityClass
+import org.jetbrains.exposed.dao.EntityID
+import org.jetbrains.exposed.dao.UUIDTable
+import java.util.*
 
-import java.io.Serializable
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
+object Widgets: UUIDTable() {
+    val value = varchar("value", 50)
+}
 
-@Entity
-@Table(name = "widget")
-class Widget: Serializable {
-    @Id
-    var id: Int? = null
+class Widget(id: EntityID<UUID>): Entity<UUID> (id) {
+    companion object: EntityClass<UUID, Widget> (Widgets)
 
-    @Column(name= "value")
-    var value: String? = null
+    var value by Widgets.value
+
 }

@@ -17,6 +17,7 @@ java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
 	mavenCentral()
+	maven ( "https://dl.bintray.com/kotlin/exposed" )
 }
 
 dependencies {
@@ -35,6 +36,7 @@ dependencies {
 
 	implementation ("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation ( "com.squareup:kotlinpoet:1.6.0")
+	implementation ("org.jetbrains.exposed:exposed:0.17.7")
 }
 
 tasks.withType<Test> {
