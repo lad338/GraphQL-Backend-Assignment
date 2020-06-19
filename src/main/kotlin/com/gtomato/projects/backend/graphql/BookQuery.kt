@@ -73,12 +73,11 @@ class BookQuery: Query {
         }
     }
 
-//    suspend fun getBookById (id: String) : Book? = withContext(context) {
-//        bookRepository
-//            .findById(UUID.fromString(id))
-//            .map { Book.fromEntity(it) }
-//            .orElse(null)
-//    }
+    suspend fun getBookById (id: String) : Book? = withContext(context) {
+        bookRepository.findById(id)
+            ?.let { Book.fromEntity(it) }
+            ?: throw RuntimeException("No book found for ID: $id")
+    }
 //
 //    suspend fun listBooks(
 //        page: Int?,
