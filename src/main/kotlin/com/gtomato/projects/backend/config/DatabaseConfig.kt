@@ -1,5 +1,7 @@
 package com.gtomato.projects.backend.config
 
+import com.gtomato.projects.backend.model.entity.Books
+import com.gtomato.projects.backend.model.entity.Users
 import com.gtomato.projects.backend.model.entity.Widgets
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -30,7 +32,9 @@ class DatabaseConfig: InitializingBean {
         databaseConnection
         transaction {
             SchemaUtils.create(
-                Widgets
+                Widgets,
+                Users,
+                Books
             )
         }
     }

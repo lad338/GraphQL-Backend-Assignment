@@ -46,7 +46,7 @@ class WidgetQuery: Query {
 
     suspend fun allWidgets(): List<Widget> = withContext(context) {
         widgetRepository
-            .getAll()
+            .findAll()
             .map {
                 Widget.fromEntity(it)
             }

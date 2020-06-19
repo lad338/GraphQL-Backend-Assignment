@@ -1,26 +1,21 @@
 package com.gtomato.projects.backend.model.entity
 
+import org.jetbrains.exposed.dao.Entity
+import org.jetbrains.exposed.dao.EntityClass
+import org.jetbrains.exposed.dao.EntityID
+import org.jetbrains.exposed.dao.UUIDTable
 import java.util.*
-import javax.persistence.*
-import kotlin.collections.HashSet
 
-@Entity
-@Table(name = "book")
-class Book {
+object Books: UUIDTable() {
+    val name = Books.varchar("name", 50)
+    val publishDate = Books.datetime("publishDate").nullable()
+    val authorId = Books.reference("authorId", Users)
+}
 
-    @Id
-    lateinit var id: UUID
 
-    @Column(name = "name")
-    var name: String? = null
-
-    @Column(name = "date")
-    var publishDate: Date? = null
-
-    @ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.DETACH, CascadeType.REMOVE])
-    @JoinColumn(name = "author_id")
-    var author: User? = null
-
-    @OneToMany(targetEntity = Comment::class, cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.EAGER)
-    var comments: List<Comment> = ArrayList()
+class Book (id: EntityID<UUID>): Entity<UUID>(id) {
+    companion object: EntityClass<UUID, Book> (Books)
+    var name by Books.name
+    var publishDate by Books.publishDate
+    var authorId by Books.authorId
 }

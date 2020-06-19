@@ -9,7 +9,7 @@ interface WidgetRepository  {
 
     fun findById (id: String): Widget?
 
-    fun getAll(): List<Widget>
+    fun findAll(): List<Widget>
 
 }
 
@@ -23,7 +23,7 @@ class WidgetRepositoryImpl: WidgetRepository {
         }
     }
 
-    override fun getAll(): List<Widget> {
+    override fun findAll(): List<Widget> {
         return transaction {
             Widget.all().toList()
         }

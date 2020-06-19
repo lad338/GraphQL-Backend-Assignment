@@ -34,9 +34,9 @@ dependencies {
 	implementation("com.expediagroup:graphql-kotlin-spring-server:3.0.0-RC8")
 	implementation("com.expediagroup:graphql-kotlin-client:3.0.0-RC8")
 
-	implementation ("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation ( "com.squareup:kotlinpoet:1.6.0")
 	implementation ("org.jetbrains.exposed:exposed:0.17.7")
+	implementation("javax.validation", "validation-api", "2.0.1.Final")
 }
 
 tasks.withType<Test> {
