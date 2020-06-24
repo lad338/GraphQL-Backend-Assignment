@@ -55,6 +55,11 @@ class UserQuery: Query {
     }
 }
 
+data class UserMutator (
+    val name: String,
+    val avatar: String? = null
+)
+
 @Service
 class UserUpdater: Mutation {
 
@@ -65,12 +70,12 @@ class UserUpdater: Mutation {
     @Autowired
     private lateinit var userRepository: UserRepository
 
-    suspend fun saveUser (name: String): User = withContext(context) {
+    suspend fun saveUser (user: UserMutator): User = withContext(context) {
         transaction {
-            val user = UserEntity.new {
-                this.name = name
+            val newUser = UserEntity.new {
+                this.name = user.name
             }
-            User.fromEntity(user)
+            User.fromEntity(newUser)
         }
     }
 }

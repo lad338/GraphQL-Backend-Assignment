@@ -16,11 +16,8 @@ import org.joda.time.DateTime
 import org.springframework.beans.factory.BeanFactory
 import org.springframework.beans.factory.BeanFactoryAware
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
 import org.springframework.stereotype.Service
-import java.sql.Date
-import java.util.*
 import java.util.concurrent.CompletableFuture
 import com.gtomato.projects.backend.model.entity.Book as BookEntity
 
@@ -99,6 +96,12 @@ class BookQuery: Query {
 //    }
 }
 
+data class BookMutator (
+    val name: String,
+    val publishDate: String? = null,
+    val authorId: String
+)
+
 
 @Service
 class BookUpdater: Mutation {
@@ -113,17 +116,16 @@ class BookUpdater: Mutation {
     @Autowired
     private lateinit var userService: UserService
 
-    suspend fun saveBook (name: String, authorId: String, publishDate: String?): Book = withContext(context) {
-        val author = userService.getUserById(authorId)
+    suspend fun saveBook (book: BookMutator): Book = withContext(context) {
+        val author = userService.getUserById(book.authorId)
         transaction {
-            val book = BookEntity.new {
-                this.name = name
-                this.publishDate = publishDate?.let { DateTime.parse(it) }
+            val newBook = BookEntity.new {
+                this.name = book.name
+                this.publishDate = book.publishDate?.let { DateTime.parse(it) }
                 this.authorId = author.id
             }
 
-
-            Book.fromEntity(book)
+            Book.fromEntity(newBook)
         }
     }
 
