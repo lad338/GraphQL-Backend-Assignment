@@ -45,7 +45,7 @@ class Book (
             return Book (
                 ID(book.id.toString()),
                 book.name,
-                book.publishDate.toString(),
+                book.publishDate?.toString(),
                 book.authorId.toString()
             )
         }
