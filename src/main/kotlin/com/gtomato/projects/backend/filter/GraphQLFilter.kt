@@ -3,6 +3,7 @@ package com.gtomato.projects.backend.filter
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.neq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.or
 
@@ -18,7 +19,7 @@ fun applyStringFilterToColumn (column: Column<String>, filter: GraphQLStringFilt
         return column eq it
     }
     filter.neq?.let {
-        return column eq it
+        return column neq it
     }
     filter.and?.let {
         return it.map { filter ->
