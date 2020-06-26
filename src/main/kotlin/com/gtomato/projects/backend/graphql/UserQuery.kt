@@ -3,7 +3,7 @@ package com.gtomato.projects.backend.graphql
 import com.expediagroup.graphql.scalars.ID
 import com.expediagroup.graphql.spring.operations.Mutation
 import com.expediagroup.graphql.spring.operations.Query
-import com.gtomato.projects.backend.filter.GraphQLStringFilter
+import com.gtomato.projects.backend.filter.*
 import com.gtomato.projects.backend.repository.UserRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -11,6 +11,7 @@ import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.util.*
 import com.gtomato.projects.backend.model.entity.User as UserEntity
 
 data class User(
@@ -30,8 +31,12 @@ data class User(
 }
 
 data class UserFilter (
-    val id: GraphQLStringFilter?= null,
-    val name: GraphQLStringFilter?= null
+    val id: GraphQLStringFilter? = null,
+    val name: GraphQLStringFilter? = null
+)
+
+data class NewUserFilter (
+    val name: StringFilter? = null
 )
 
 
@@ -52,6 +57,10 @@ class UserQuery: Query {
 
     suspend fun searchUsers(userFilter: UserFilter) = withContext(context) {
         userRepository.search(userFilter).map { User.fromEntity(it) }
+    }
+
+    suspend fun newSearchUsers (userFilter: NewUserFilter) = withContext(context){
+        userRepository.findAll().map { User.fromEntity(it) }
     }
 }
 

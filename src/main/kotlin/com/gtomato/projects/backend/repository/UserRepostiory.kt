@@ -38,9 +38,7 @@ class UserRepositoryImpl: UserRepository {
         return transaction {
             User.find {
                 userFilter.name
-                    ?.let {
-                        applyStringFilterToColumn(Users.name, it)
-                    }
+                    ?.let { applyStringFilterToColumn(Users.name, it) }
                     ?: Op.TRUE
                 }
                 .toList()

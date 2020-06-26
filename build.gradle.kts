@@ -37,6 +37,7 @@ dependencies {
 	implementation ( "com.squareup:kotlinpoet:1.6.0")
 	implementation ("org.jetbrains.exposed:exposed:0.17.7")
 	implementation("javax.validation", "validation-api", "2.0.1.Final")
+	implementation( "com.graphql-java", "graphql-java-extended-scalars", "1.0")
 }
 
 tasks.withType<Test> {

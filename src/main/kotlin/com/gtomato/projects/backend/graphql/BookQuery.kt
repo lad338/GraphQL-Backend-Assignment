@@ -4,6 +4,9 @@ import com.expediagroup.graphql.annotations.GraphQLIgnore
 import com.expediagroup.graphql.scalars.ID
 import com.expediagroup.graphql.spring.operations.Mutation
 import com.expediagroup.graphql.spring.operations.Query
+import com.gtomato.projects.backend.filter.DateTimeFilter
+import com.gtomato.projects.backend.filter.Pagination
+import com.gtomato.projects.backend.filter.StringFilter
 import com.gtomato.projects.backend.repository.BookRepository
 import com.gtomato.projects.backend.service.UserService
 import graphql.schema.DataFetcher
@@ -21,14 +24,11 @@ import org.springframework.stereotype.Service
 import java.util.concurrent.CompletableFuture
 import com.gtomato.projects.backend.model.entity.Book as BookEntity
 
-//class BookBuilder(
-//    val id: String,
-//    val userService: UserService
-//) {
-//    fun build(): Book {
-//
-//    }
-//}
+data class BookFilter (
+    val name: StringFilter? = null,
+    val publishDate: DateTimeFilter? = null,
+    val user: NewUserFilter? = null
+)
 
 class Book (
     val id: ID,
@@ -75,24 +75,11 @@ class BookQuery: Query {
             ?.let { Book.fromEntity(it) }
             ?: throw RuntimeException("No book found for ID: $id")
     }
-//
-//    suspend fun listBooks(
-//        page: Int?,
-//        size: Int?,
-//        bookName: String?,
-//        authorName: String?,
-//        keyword: String?,
-//        bookNameSort: Boolean?,             // True = ASC, False = DESC, Null = default order
-//        publishDateSort: Boolean?           // True = ASC, False = DESC, Null = default order
-//    ): List<Book> = withContext(context) {
-//        val pageRequest = PageRequest.of(page ?: 0, size ?: 5)
-//
-//        val pageResults = keyword ?.let {
-//                bookRepository.findByNameContainingOrAuthor_NameContaining(it, it, pageRequest)
-//            }
-//            ?: bookRepository.findByNameContainingAndAuthor_NameContaining(bookName ?: "", authorName ?: "", pageRequest)
-//
-//        pageResults.content.map { Book.fromEntity(it) }
+
+// WIP
+//    suspend fun searchBooks(bookFilter: BookFilter, pagination: Pagination): List<Book> = withContext(context) {
+//        bookRepository.search(bookFilter, pagination)
+//            .map { Book.fromEntity(it) }
 //    }
 }
 
